@@ -21,7 +21,7 @@
 | IDs | MongoDB ObjectId as 24-char hex string |
 | Money | Integer **paise** (₹1 = 100) in all API fields; currency `INR` |
 | Pagination | `?page=1&limit=20` (max `limit` = 50). Response includes `total`, `page`, `limit` |
-| Validation | Every request body/query validated by Zod schemas from `packages/shared-types` |
+| Validation | Every request body/query validated by Zod schemas from `packages/shared-schemas` (plain JavaScript, ES modules) |
 
 ### 0.1 Response envelope
 
@@ -301,18 +301,34 @@ Acquired via atomic `SET key value NX EX ttl`. Redis is **never** the source of 
 
 ---
 
-## 11. Shared Types (`packages/shared-types`)
+## 11. Shared Schemas (`packages/shared-schemas`)
+
+The project is written in **plain JavaScript (ES modules)**, so there are no `.ts` type files. Zod schemas are the single source of truth for request/response shapes and are imported by both apps. Use JSDoc `@typedef` / `@param` comments for editor autocomplete.
 
 Zod schemas that must be agreed before coding:
 
 | File | Schemas |
 |---|---|
-| `auth.schema.ts` | `RegisterBody`, `LoginBody`, `User`, `Role` |
-| `show.schema.ts` | `MovieCard`, `ShowSummary`, `ShowsByVenue`, `Seat`, `SeatStatus` |
-| `booking.schema.ts` | `LockBody`, `Booking`, `BookingStatus`, `AmountBreakdown` |
-| `payment.schema.ts` | `InitiateBody`, `InitiateResponse`, `PaymentStatus` |
-| `review.schema.ts` | `ReviewBody`, `Review` |
-| `common.schema.ts` | `ApiSuccess<T>`, `ApiError`, `Pagination` |
+| `auth.schema.js` | `RegisterBody`, `LoginBody`, `User`, `Role` |
+| `show.schema.js` | `MovieCard`, `ShowSummary`, `ShowsByVenue`, `Seat`, `SeatStatus` |
+| `booking.schema.js` | `LockBody`, `Booking`, `BookingStatus`, `AmountBreakdown` |
+| `payment.schema.js` | `InitiateBody`, `InitiateResponse`, `PaymentStatus` |
+| `review.schema.js` | `ReviewBody`, `Review` |
+| `common.schema.js` | `apiSuccess(schema)`, `ApiError`, `Pagination` |
+
+Example (`booking.schema.js`):
+```js
+import { z } from "zod";
+
+export const LockBody = z.object({
+  showId: z.string().length(24),
+  seatIds: z.array(z.string().length(24)).min(1).max(10),
+});
+
+/** @typedef {z.infer<typeof LockBody>} LockBodyT */
+```
+
+Package setup: `"type": "module"` in every `package.json`; consume via npm workspaces as `import { LockBody } from "@mtbs/shared-schemas"`.
 
 ---
 
@@ -340,3 +356,4 @@ Zod schemas that must be agreed before coding:
 | Date | Version | Author | Change |
 |---|---|---|---|
 | 2026-10-05 | 0.1 | — | Initial draft from SRS v1.0 |
+| 2026-10-05 | 0.2 | — | Switched project language from TypeScript to JavaScript; `shared-types` renamed `shared-schemas` (`.schema.js`) |
