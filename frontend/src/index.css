@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+  body { @apply bg-ink-50 font-sans text-ink-900 antialiased; }
+  h1, h2, h3, h4 { @apply font-display tracking-tight text-ink-900; }
+  :focus-visible { @apply outline-none ring-2 ring-brand-600 ring-offset-2 ring-offset-white; }
+  dialog::backdrop { background: rgba(26, 29, 38, 0.55); }
+  dialog { @apply p-0; }
+}
+
+@layer components {
+  .skip-link { @apply sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[100] focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-sm focus:font-semibold; }
+  .container-page { @apply mx-auto w-full max-w-6xl px-4 sm:px-6; }
+  .card { @apply rounded-xl border border-ink-200 bg-white shadow-card; }
+
+  /* Seat map — states are distinguished by shape/icon as well as colour */
+  .seat-grid { --seat-size: clamp(1.3rem, calc((100vw - 4rem - (var(--cols, 12) - 1) * 0.25rem) / var(--cols, 12)), 2rem); }
+  @media (min-width: 640px) { .seat-grid { --seat-size: 2rem; } }
+  .seat { @apply relative flex shrink-0 items-center justify-center rounded-t-lg rounded-b-[5px] border text-[10px] font-semibold transition-colors; width: var(--seat-size, 2rem); height: var(--seat-size, 2rem); }
+  .seat-available { @apply border-ink-300 bg-white text-ink-600 hover:border-brand-600 hover:bg-brand-50; }
+  .seat-selected { @apply border-gold-600 bg-gold-400 text-ink-900; }
+  .seat-mine { @apply border-brand-600 bg-brand-100 text-brand-700; }
+  .seat-locked { @apply cursor-not-allowed border-ink-300 text-ink-400; background-image: repeating-linear-gradient(135deg, #ECEEF3 0 4px, #fff 4px 8px); }
+  .seat-booked { @apply cursor-not-allowed border-ink-300 bg-ink-300 text-ink-600; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
