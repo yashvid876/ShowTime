@@ -1,0 +1,16 @@
+export const qk = {
+  cities: ['cities'],
+  recommendations: (city, authed) => ['recommendations', city, authed],
+  titles: (kind, params) => ['titles', kind, params],
+  title: (kind, id, params) => ['title', kind, id, params],
+  reviews: (kind, id, page) => ['reviews', kind, id, page],
+  show: (id) => ['show', id],
+  seatmap: (id) => ['seatmap', id],
+  booking: (id) => ['booking', id],
+  myBookings: (status, page) => ['bookings', 'mine', status, page],
+  refundEstimate: (id) => ['refund-estimate', id],
+  adminVenues: ['admin', 'venues'],
+  adminAnalytics: (venueId, params) => ['admin', 'analytics', venueId, params],
+  adminDisputes: (params) => ['admin', 'disputes', params],
+  adminAudit: (params) => ['admin', 'audit', params],
+};

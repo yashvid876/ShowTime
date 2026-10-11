@@ -1,0 +1,12 @@
+{
+  "name": "mtbs",
+  "private": true,
+  "type": "module",
+  "workspaces": ["frontend", "packages/*"],
+  "scripts": {
+    "dev:frontend": "npm run dev -w frontend",
+    "build:frontend": "npm run build -w frontend",
+    "lint": "npm run lint -w frontend",
+    "test": "npm run test -w frontend"
+  }
+}
